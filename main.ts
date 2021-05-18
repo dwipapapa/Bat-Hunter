@@ -6,23 +6,23 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         if (mySprite.overlapsWith(value)) {
             Score += 1
             value.destroy()
+            Shower.say(Score)
             music.baDing.play()
         }
     }
 })
-sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
-	
-})
 let mySprite2: Sprite = null
-let Score = 0
 let mySprite: Sprite = null
-let Shower = sprites.create(img`
+let Score = 0
+let Shower: Sprite = null
+Shower = sprites.create(img`
     . . . . . 
     . . . . . 
     . . . . . 
     . . . . . 
     . . . . . 
     `, SpriteKind.Value_Shower)
+Shower.say(Score)
 Shower.setPosition(23, 106)
 mySprite = sprites.create(img`
     . . 2 . . 
@@ -35,9 +35,6 @@ controller.moveSprite(mySprite, 150, 150)
 tiles.setSmallTilemap(tilemap`level2`)
 scene.setBackgroundColor(11)
 mySprite.z = 100
-game.onUpdate(function () {
-    Shower.say(Score)
-})
 game.onUpdateInterval(1000, function () {
     mySprite2 = sprites.create(img`
         . . f f f . . . . . . . . f f f 
@@ -57,6 +54,7 @@ game.onUpdateInterval(1000, function () {
         . . f b b b b b b c f . . . . . 
         . . . f f f f f f f . . . . . . 
         `, SpriteKind.Enemy)
+    mySprite2.setStayInScreen(true)
     tiles.placeOnRandomTile(mySprite2, assets.tile`myTile2`)
     animation.runImageAnimation(
     mySprite2,
@@ -134,7 +132,7 @@ game.onUpdateInterval(1000, function () {
     )
     animation.runMovementAnimation(
     mySprite2,
-    animation.animationPresets(animation.bobbing),
+    "v -15 h 15 v 15 h -15",
     1000,
     true
     )
