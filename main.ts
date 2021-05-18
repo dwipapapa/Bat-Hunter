@@ -1,14 +1,15 @@
 namespace SpriteKind {
     export const Value_Shower = SpriteKind.create()
     export const TS = SpriteKind.create()
+    export const Timer = SpriteKind.create()
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Title_Screen_Open) {
         mySprite3.destroy()
-        Title_Screen_Open = false
         game.splash("This game is about hunting", "bats")
         game.splash("Press A to shoot the", "bats")
         game.splash("Try to hit the most bats", "you can")
+        game.splash("Don't let them", "ESCAPE!!!")
         Shower = sprites.create(img`
             . 
             `, SpriteKind.Value_Shower)
@@ -27,6 +28,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         mySprite.z = 100
         Bat_Swarm()
         info.startCountdown(15)
+        Title_Screen_Open = false
     } else {
         for (let value of sprites.allOfKind(SpriteKind.Enemy)) {
             if (mySprite.overlapsWith(value)) {
@@ -34,12 +36,6 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 value.destroy()
                 Shower.say(Score)
                 music.baDing.play()
-                if (sprites.allOfKind(SpriteKind.Enemy).length == 0) {
-                    info.stopCountdown()
-                    game.splash("Another Swarm is coming!!!")
-                    info.startCountdown(15)
-                    Bat_Swarm()
-                }
             }
         }
     }
@@ -76,6 +72,26 @@ function Spawn_Bat () {
         `, SpriteKind.Enemy)
     mySprite2.setStayInScreen(true)
     tiles.placeOnRandomTile(mySprite2, assets.tile`myTile2`)
+    mySprite4 = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.Timer)
+    mySprite4.lifespan = randint(1000, 5000)
+    sprites.setDataSprite(mySprite4, "Timer", mySprite2)
     animation.runImageAnimation(
     mySprite2,
     [[img`
@@ -361,6 +377,12 @@ function Spawn_Bat () {
     true
     )
 }
+sprites.onDestroyed(SpriteKind.Timer, function (sprite) {
+    animation.stopAnimation(animation.AnimationTypes.MovementAnimation, sprites.readDataSprite(sprite, "Timer"))
+    sprites.readDataSprite(sprite, "Timer").vx = 100
+    sprites.readDataSprite(sprite, "Timer").setFlag(SpriteFlag.DestroyOnWall, true)
+})
+let mySprite4: Sprite = null
 let mySprite2: Sprite = null
 let mySprite: Sprite = null
 let Score = 0
@@ -490,3 +512,15 @@ mySprite3 = sprites.create(img`
     bbcccccccccbbbbbbbbbbbbbbbbcccccccbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     bbcccccccccbbbbbbbbbbbbbbbbcccccccbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     `, SpriteKind.TS)
+game.onUpdate(function () {
+    if (Title_Screen_Open) {
+    	
+    } else {
+        if (sprites.allOfKind(SpriteKind.Enemy).length == 0) {
+            info.stopCountdown()
+            game.splash("Another Swarm is coming!!!")
+            info.startCountdown(15)
+            Bat_Swarm()
+        }
+    }
+})

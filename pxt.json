@@ -4,7 +4,8 @@
     "description": "",
     "dependencies": {
         "device": "*",
-        "small-tilemaps": "github:riknoll/small-tilemaps#v0.0.1"
+        "small-tilemaps": "github:riknoll/small-tilemaps#v0.0.1",
+        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.1.0"
     },
     "files": [
         "main.blocks",
