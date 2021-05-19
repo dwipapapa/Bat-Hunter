@@ -15,23 +15,23 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             `, SpriteKind.Value_Shower)
         Shower.say(Score)
         Shower.setPosition(23, 106)
-        mySprite = sprites.create(img`
+        Cursor = sprites.create(img`
             . . 2 . . 
             . . 2 . . 
             2 2 2 2 2 
             . . 2 . . 
             . . 2 . . 
             `, SpriteKind.Player)
-        controller.moveSprite(mySprite, 150, 150)
+        controller.moveSprite(Cursor, 150, 150)
         tiles.setSmallTilemap(tilemap`level2`)
         scene.setBackgroundColor(11)
-        mySprite.z = 100
+        Cursor.z = 100
         Bat_Swarm()
         info.startCountdown(15)
         Title_Screen_Open = false
     } else {
         for (let value of sprites.allOfKind(SpriteKind.Enemy)) {
-            if (mySprite.overlapsWith(value)) {
+            if (Cursor.overlapsWith(value)) {
                 Score += 1
                 value.destroy()
                 Shower.say(Score)
@@ -379,17 +379,92 @@ function Spawn_Bat () {
 }
 sprites.onDestroyed(SpriteKind.Timer, function (sprite) {
     animation.stopAnimation(animation.AnimationTypes.MovementAnimation, sprites.readDataSprite(sprite, "Timer"))
+    animation.runImageAnimation(
+    sprites.readDataSprite(sprite, "Timer"),
+    [img`
+        f f f . . . . . . . . f f f . . 
+        c b b c f . . . . . . c c f f . 
+        . c b b c f . . . . . . c c f f 
+        . c c c b f . . . . . . c f c f 
+        . c c b b c f . c c . c c f f f 
+        . c b b c b f c c 3 c c 3 c f f 
+        . c b c c b f c b 3 c b 3 b f f 
+        . . c c c b b c b b b b b b c . 
+        . . . c c c c b b 1 b b b 1 c . 
+        . . . . c c b b b b b b b b b c 
+        . . . . f b b b b c b b b c b c 
+        . . . c f b b b b 1 f f f 1 b f 
+        . . c c f b b b b b b b b b b f 
+        . . . . f c b b b b b b b b f . 
+        . . . . . f c b b b b b b f . . 
+        . . . . . . f f f f f f f . . . 
+        `,img`
+        . . . . . . . . . . . f f f . . 
+        f f f . . . . . . . . c c f f f 
+        c b b c f . . . c c . . c c f f 
+        . c b b b f f c c 3 c c 3 c f f 
+        . c c c b b f c b 3 c b 3 b f f 
+        . c c b c b f c b b b b b b c . 
+        . c b b c b b c b b b b b b c . 
+        . c b c c c b b b 1 b b b 1 b c 
+        . . c c c c c b b b b b b b b c 
+        . . . c f b b b b c b b b c b f 
+        . . c c f b b b b 1 f f f 1 b f 
+        . . . . f c b b b b b b b b f . 
+        . . . . . f c b b b b b b f . . 
+        . . . . . . f f f f f f f . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . c c . . c c . . 
+        . . . . . . c c c 3 c c 3 c . . 
+        . . . . . c c c b 3 c b 3 b c . 
+        . . . . f f b b b b b b b b c . 
+        . . . . f f b b b b b b b b c c 
+        . . . f f f c b b 1 b b b 1 b c 
+        . . . f f f f b b b b b b b b c 
+        . . . b b b c c b c b b b c b f 
+        . . . c c c c f b 1 f f f 1 b f 
+        . . . c c b b f b b b b b b f . 
+        . . . c b b c c b b b b b f c c 
+        . . c b b c c f f f f f f c c c 
+        . c c c c c . . . . . . c c c . 
+        c c c c . . . . . . . c c c . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . f f f . . . . . . . . f f f . 
+        . c b b c f . . . . . . . c f f 
+        . . c b b c f . . . . . . c c f 
+        . . c c c b f . . . . . . . f c 
+        . . c c b b f f . . . . . f f c 
+        . . c b b c b f c c . c c f f f 
+        . . c b c c b f c c c c c f f f 
+        . . . c c c b c b 3 c c 3 c f . 
+        . . . c c c c b b 3 c b 3 b c . 
+        . . . . c c b b b b b b b b c c 
+        . . . c f b b b b 1 b b b 1 b c 
+        . . c c f b b b b b b b b b b f 
+        . . . . f b b b b c b b b c b f 
+        . . . . f c b b b 1 f f f 1 f . 
+        . . . . . f c b b b b b b f . . 
+        . . . . . . f f f f f f f . . . 
+        `],
+    100,
+    true
+    )
     sprites.readDataSprite(sprite, "Timer").vx = 100
     sprites.readDataSprite(sprite, "Timer").setFlag(SpriteFlag.DestroyOnWall, true)
 })
 let mySprite4: Sprite = null
 let mySprite2: Sprite = null
-let mySprite: Sprite = null
+let Cursor: Sprite = null
 let Score = 0
 let Shower: Sprite = null
 let mySprite3: Sprite = null
 let Title_Screen_Open = false
 Title_Screen_Open = true
+// TS for Title Screen
 mySprite3 = sprites.create(img`
     bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
