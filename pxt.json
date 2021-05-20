@@ -5,7 +5,8 @@
     "dependencies": {
         "device": "*",
         "small-tilemaps": "github:riknoll/small-tilemaps#v0.0.1",
-        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.1.0"
+        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.1.0",
+        "arcade-story": "github:microsoft/arcade-storytelling#v1.0.1"
     },
     "files": [
         "main.blocks",
@@ -19,7 +20,7 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.4.41",
+        "target": "1.4.43",
         "targetId": "arcade"
     },
     "supportedTargets": [

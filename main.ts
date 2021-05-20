@@ -13,8 +13,20 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         Shower = sprites.create(img`
             . 
             `, SpriteKind.Value_Shower)
-        Shower.say(Score)
         Shower.setPosition(23, 106)
+        story.showPlayerChoices("1 Player", "2 Player")
+        tiles.setSmallTilemap(tilemap`level2`)
+        if (story.checkLastAnswer("2 Player")) {
+            Cursor_2 = sprites.create(img`
+                . . 9 . . 
+                . . 9 . . 
+                9 9 9 9 9 
+                . . 9 . . 
+                . . 9 . . 
+                `, SpriteKind.Player)
+            controller.player2.moveSprite(Cursor_2, 150, 150)
+            Cursor_2.z = 100
+        }
         Cursor = sprites.create(img`
             . . 2 . . 
             . . 2 . . 
@@ -23,7 +35,6 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             . . 2 . . 
             `, SpriteKind.Player)
         controller.moveSprite(Cursor, 150, 150)
-        tiles.setSmallTilemap(tilemap`level2`)
         scene.setBackgroundColor(11)
         Cursor.z = 100
         Bat_Swarm()
@@ -36,6 +47,22 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 value.destroy()
                 Shower.say(Score)
                 music.baDing.play()
+            }
+        }
+    }
+})
+controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
+    if (Title_Screen_Open) {
+    	
+    } else {
+        if (Cursor_2) {
+            for (let value of sprites.allOfKind(SpriteKind.Enemy)) {
+                if (Cursor_2.overlapsWith(value)) {
+                    Score += 1
+                    value.destroy()
+                    Shower.say(Score)
+                    music.baDing.play()
+                }
             }
         }
     }
@@ -458,8 +485,9 @@ sprites.onDestroyed(SpriteKind.Timer, function (sprite) {
 })
 let mySprite4: Sprite = null
 let mySprite2: Sprite = null
-let Cursor: Sprite = null
 let Score = 0
+let Cursor: Sprite = null
+let Cursor_2: Sprite = null
 let Shower: Sprite = null
 let mySprite3: Sprite = null
 let Title_Screen_Open = false
